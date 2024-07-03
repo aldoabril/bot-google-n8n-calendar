@@ -14,7 +14,7 @@ const PROMPT_DISCRIMINATOR = `### Historial de Conversación (Vendedor/Cliente) 
 
 ### Instrucciones ###
 
-Por favor, analiza la siguiente conversación y determina la intención del usuario.`
+Analiza la siguiente conversación y determina la intención del usuario.`
 
 export default async (_: BotContext, { state, gotoFlow, extensions }: BotMethods) => {
     const ai = extensions.ai as AIClass
