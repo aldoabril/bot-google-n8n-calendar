@@ -90,7 +90,7 @@ class AIClass {
                 functions: [
                     {
                         name: "fn_get_prediction_intent",
-                        description: "Predict the user intention for a given conversation",
+                        description: "Predice la intencion del usuario tomando en cuenta la conversacion actual.",
                         parameters: {
                             type: "object",
                             properties: {
@@ -100,6 +100,7 @@ class AIClass {
                                     items: {
                                         type: "string",
                                         enum: [
+                                            "IDENTIFICAR",
                                             "PROGRAMAR",
                                             "HABLAR",
                                         ]

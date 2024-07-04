@@ -35,7 +35,24 @@ const flowSchedule = addKeyword(EVENTS.ACTION).addAction(async (_, { extensions,
     await flowDynamic('Dame un momento para consultar la agenda...');
     const ai = extensions.ai as AIClass;
     const history = getHistoryParse(state);
-    const list = await getCurrentCalendar()
+    const listFake = [
+        {
+          end: '2024-06-12T08:45:00.000Z',
+          name: 'Aldo',
+          start: '2024-06-12T08:00:00.000Z'
+        },
+        {
+          end: '2024-07-06T08:45:00.000Z',
+          name: 'Aldo',
+          start: '2024-07-06T08:00:00.000Z'
+        },
+        {
+          end: '2024-07-06T09:15:00.000Z',
+          name: 'Aldo Eslyn',
+          start: '2024-07-06T08:30:00.000Z'
+        }
+      ]
+    const list = listFake//await getCurrentCalendar()
 
     const listParse = list
         .map(({ start, end }) => ({ fromDate: new Date(start), toDate: new Date(end) }));
@@ -72,6 +89,7 @@ const flowSchedule = addKeyword(EVENTS.ACTION).addAction(async (_, { extensions,
     for (const chunk of chunks) {
         await flowDynamic([{ body: chunk.trim(), delay: generateTimer(150, 250) }]);
     }
+
 }).addAction({ capture: true }, async ({ body }, { gotoFlow, flowDynamic, state }) => {
 
     if (body.toLowerCase().includes('si')) return gotoFlow(flowConfirm)
