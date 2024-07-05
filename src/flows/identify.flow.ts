@@ -3,6 +3,7 @@ import { clearHistory } from "../utils/handleHistory";
 import getUsuario from "src/services/user";
 import { flowSeller } from "./seller.flow";
 import { registerFlow } from "./register.flow";
+import { flowConfirm } from "./confirm.flow";
 
 
 /**
@@ -34,7 +35,7 @@ const identifyFlow = addKeyword(utils.setEvent('IDENTIFY_FLOW')).addAction(async
         }
     //clearHistory(state)
     await flowDynamic('Bienvenido '+  persona.nombres)
-    gotoFlow(flowSeller)
+    gotoFlow(flowConfirm)
     
 })
     
