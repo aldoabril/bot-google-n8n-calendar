@@ -4,18 +4,21 @@ import AIClass from "../services/ai"
 import { flowSeller } from "../flows/seller.flow"
 import { flowSchedule } from "../flows/schedule.flow"
 import { identifyFlow } from "src/flows/identify.flow"
+import { flowConfirm } from "src/flows/confirm.flow"
 
-const PROMPT_DISCRIMINATOR = `### Historial de Conversación (Vendedor/Cliente) ###
-{HISTORY}
-
-### Intenciones del Usuario ###
-**IDENTIFICAR***: Selecciona esta acción si el cliente no se ha identificado con su DNI.
-**HABLAR**: Selecciona esta acción si el cliente ya se identifico y parece necesitar más información sobre el negocio, servicio o informarse del horario de atencion.
-**PROGRAMAR**: Selecciona esta acción si el ciente ya se identificó y expresamente menciona la necesidad de programar una cita. Esto puede ser indicado directamente o implícitamente, por ejemplo, mencionando la necesidad de una visita a domicilio o solicitando una reserva para un servicio específico. Ten en cuenta que esta intención solo se aplica cuando el cliente determine la hora y fecha para programar una cita.
-
-### Instrucciones ###
-
-Analiza la siguiente conversación y determina la intención del usuario.`
+const PROMPT_DISCRIMINATOR = `Como una inteligencia artificial avanzada, tu tarea es analizar el contexto de una conversación y determinar cuál de las siguientes acciones es más apropiada para realizar:
+    --------------------------------------------------------
+    Historial de conversación:
+    {HISTORY}
+    
+    Posibles acciones a realizar:
+    1. AGENDAR: Esta acción se debe realizar cuando el cliente expresa su deseo de programar una cita.
+    2. HABLAR: Esta acción se debe realizar cuando el cliente desea hacer una pregunta o necesita más información.
+    3. CONFIRMAR: Esta acción se debe realizar cuando el cliente y el vendedor llegaron a un acuerdo mutuo proporcionando una fecha, dia y hora exacta sin conflictos de hora.
+    -----------------------------
+    Tu objetivo es comprender la intención del cliente y seleccionar la acción más adecuada en respuesta a su declaración.
+    
+    Respuesta ideal (AGENDAR|HABLAR|CONFIRMAR):`
 
 export default async (_: BotContext, { state, gotoFlow, extensions }: BotMethods) => {
     const ai = extensions.ai as AIClass
@@ -36,6 +39,6 @@ export default async (_: BotContext, { state, gotoFlow, extensions }: BotMethods
     console.log({ prediction })
 
     if (prediction.includes('HABLAR')) return gotoFlow(flowSeller)
-    if (prediction.includes('PROGRAMAR')) return gotoFlow(flowSchedule)
-    if (prediction.includes('IDENTIFICAR')) return gotoFlow(identifyFlow)
+    if (prediction.includes('AGENDAR')) return gotoFlow(flowSchedule)
+    if (prediction.includes('CONFIRMAR')) return gotoFlow(flowConfirm)
 }
