@@ -17,7 +17,7 @@ const TIME_ZONE = process.env.TZ
 const flowConfirm = addKeyword(EVENTS.ACTION).addAnswer(`⏱️`).addAction(async (_, { state, gotoFlow }) => {
     let persona = state.get('persona')
     
-    if(!persona.nombres){
+    if(!persona){
         console.log('nocliente flujo de confirmacion', persona)
         return gotoFlow(notClientFlowConfirm)
     } else{
