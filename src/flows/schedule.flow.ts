@@ -6,7 +6,7 @@ import { getCurrentCalendar } from "../services/calendar";
 import { getFullCurrentDate } from "src/utils/currentDate";
 import { flowConfirm } from "./confirm.flow";
 import { addMinutes, isWithinInterval, format, parse } from "date-fns";
-import { identifyFlow } from "./identify.flow";
+import { identifyByFhoneFlow } from "./identify.flow";
 
 const DURATION_MEET = process.env.DURATION_MEET ?? 45
 
@@ -93,7 +93,7 @@ const flowSchedule = addKeyword(EVENTS.ACTION).addAction(async (_, { extensions,
 
 }).addAction({ capture: true }, async ({ body }, { gotoFlow, flowDynamic, state }) => {
 
-    if (body.toLowerCase().includes('si')) return gotoFlow(identifyFlow)
+    if (body.toLowerCase().includes('si')) return gotoFlow(identifyByFhoneFlow)
 
     await flowDynamic('¿Alguna otra fecha y hora?')
     await state.update({ desiredDate: null })

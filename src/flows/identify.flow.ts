@@ -1,11 +1,12 @@
 import { addKeyword, EVENTS, utils} from "@builderbot/bot";
 import { clearHistory } from "../utils/handleHistory";
-import getUsuario from "src/services/user";
+import Usuario from "src/services/user";
 import { flowSeller } from "./seller.flow";
 import { registerFlow } from "./register.flow";
 import { flowConfirm } from "./confirm.flow";
 
-
+const usuario = new Usuario()
+const EMPRESA_ID = process.env.EMPRESA_ID || "hIntsAEzBwy8Hwi4DNcf"
 /**
  * Encargado de pedir los datos necesarios para registrar el evento en el calendario
  */
@@ -19,11 +20,9 @@ const identifyFlow = addKeyword(utils.setEvent('IDENTIFY_FLOW')).addAction(async
 
     }
     await state.update({ dni: ctx.body })
-    const usuario = {
-        dni: state.get('dni')
-    }
-    const empresaId = "hIntsAEzBwy8Hwi4DNcf"
-    let persona = await getUsuario(usuario.dni, empresaId)
+    
+    const empresaId = process.env.EMPRESA_ID||"hIntsAEzBwy8Hwi4DNcf"
+    let persona = await usuario.getUsuario(state.get('dni'), empresaId)
     if (!persona) {
 
             await flowDynamic('Aun no eres cliente!') 
@@ -38,10 +37,31 @@ const identifyFlow = addKeyword(utils.setEvent('IDENTIFY_FLOW')).addAction(async
     gotoFlow(flowConfirm)
     
 })
+
+const identifyByFhoneFlow = addKeyword(utils.setEvent('IDENTIFY_FLOW')).addAction(async (ctx, { state,flowDynamic, gotoFlow }) => {
+    let telefono = ctx.from
+    
+    let persona = await usuario.getUsuarioByPhone(telefono, EMPRESA_ID)
+    if (!persona) {
+
+            await flowDynamic('Aun no eres cliente!') 
+            return gotoFlow(registerFlow)
+        }
+    else {
+
+        await state.update({ persona: persona })
+        }
+    //clearHistory(state)
+    await flowDynamic('Bienvenido '+  persona.nombres)
+    gotoFlow(flowConfirm)
+
+})
+
+
     
 
     
         
 
 
-export { identifyFlow }
+export { identifyFlow , identifyByFhoneFlow}

@@ -6,7 +6,7 @@ import { flowSchedule } from "./schedule.flow";
 import { flowConfirm, isClientFlowConfirm, notClientFlowConfirm } from "./confirm.flow";
 import { voiceFlow } from "./voice.flow";
 import { registerFlow } from "./register.flow";
-import { identifyFlow } from "./identify.flow"
+import { identifyFlow,identifyByFhoneFlow } from "./identify.flow"
 
 export default createFlow([
     welcomeFlow,
@@ -17,5 +17,6 @@ export default createFlow([
     notClientFlowConfirm,
     voiceFlow,
     registerFlow,
-    identifyFlow 
+    identifyFlow ,
+    identifyByFhoneFlow
 ])
